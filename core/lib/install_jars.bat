@@ -1,0 +1,2 @@
+call mvn install:install-file -DgroupId=jcifs -DartifactId=jcifs -Dversion=1.2.9 -Dpackaging=jar -Dfile=jcifs-1.2.9.jar
+call mvn install:install-file -DgroupId=fitnesse -DartifactId=fitnesse -Dversion=20060719 -Dpackaging=jar -Dfile=fitnesse-20060719.jar

@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="net.servicefixture.sample.domain.Product" table="PRODUCTS">
+		<id name="productId" type="long">
+			<column name="PRODUCT_ID" length="20"/>
+			<generator class="identity"/>
+		</id>
+		<property name="name" type="string">
+			<column name="NAME" length="30" not-null="true"/>
+		</property>
+		
+		<property name="price" type="double">
+			<column name="PRICE" not-null="true"/>
+		</property>
+		
+		<property name="description" type="string">
+			<column name="DESCRIPTION" length="255"/>
+		</property>
+		
+		<property name="availability">
+			<column name="AVAILABILITY" length="30"/>
+			<type name="net.servicefixture.sample.util.EnumUserType">
+				<param name="javaType">
+					net.servicefixture.sample.domain.Availability</param>
+			</type>
+		</property>
+		
+		<joined-subclass name="net.servicefixture.sample.domain.Book"
+			table="BOOKS">
+			<key column="BOOK_ID"/>
+			<property name="numberOfPages" type="int">
+				<column name="NUMBER_OF_PAGES"/>
+			</property>
+			<property name="isbn" type="string">
+				<column name="ISBN" length="30" not-null="true"/>
+			</property>
+			<property name="publishDate" type="timestamp">
+				<column name="PUBLISH_DATE"/>
+			</property>
+			<property name="authors" type="string">
+				<column name="AUTHORS" length="255"/>
+			</property>
+		</joined-subclass>
+		
+		<joined-subclass name="net.servicefixture.sample.domain.Computer"
+			table="COMPUTERS">
+			<key column="COMPUTER_ID"/>
+			<property name="memory" type="long">
+				<column name="MEMORY"/>
+			</property>
+			<property name="monitorSize" type="int">
+				<column name="MONITOR_SIZE"/>
+			</property>
+		</joined-subclass>
+		
+		<joined-subclass name="net.servicefixture.sample.domain.Software"
+			table="SOFTWARES">
+			<key column="SOFTWARE_ID"/>
+			<property name="platforms">
+				<column name="PLATFORMS" length="50" not-null="true"/>
+				<type name="net.servicefixture.sample.util.ListUserType"/>
+			</property>
+			<property name="media" type="string">
+				<column name="MEDIA"/>
+			</property>
+			<property name="itemQuantity" type="int">
+				<column name="ITEM_QUANTITY"/>
+			</property>
+		</joined-subclass>
+		
+	</class>
+</hibernate-mapping>

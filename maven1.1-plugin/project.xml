@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project>
+  <pomVersion>3</pomVersion>
+  <id>maven1.1-servicefixture-plugin</id>
+  <name>Maven ServiceFixture Plugin</name>
+  <groupId>servicefixture</groupId>
+  <currentVersion>0.9</currentVersion>
+  <description>
+  	Maven 1.1 ServiceFixture Plugin
+  </description>
+  <shortDescription>Maven 1.1 ServiceFixture Plugin</shortDescription>
+  <url>http://servicefixture.sourceforge.net</url>
+
+  <developers>
+    <developer>
+      <name>Chunyun Zhao</name>
+      <id>czhao</id>
+      <email>chunyun.zhao@gmail.com</email>
+      <roles>
+        <role>Software Developer</role>
+      </roles>
+    </developer>     
+  </developers>
+  <contributors/>
+
+  <dependencies>
+    <dependency>
+	<groupId>fitnesse</groupId>
+	<artifactId>fitnesse</artifactId>
+	<version>20060719</version>
+	<type>jar</type>
+    </dependency>  
+   <dependency> 
+      <groupId>servicefixture</groupId> 
+      <artifactId>servicefixture</artifactId> 
+      <version>0.9</version> 
+      <url>http://servicefixture.sourceforge.net</url> 
+      <type>jar</type>
+    </dependency> 
+    <dependency>
+	<groupId>commons-httpclient</groupId>
+	<artifactId>commons-httpclient</artifactId>
+	<version>2.0</version>
+	<type>jar</type>
+    </dependency>     
+    <dependency>
+	<groupId>commons-logging</groupId>
+	<artifactId>commons-logging</artifactId>
+	<version>1.0.4</version>
+    </dependency>
+    <dependency>
+	<groupId>commons-lang</groupId>
+	<artifactId>commons-lang</artifactId>
+	<version>2.1</version>
+    </dependency>    
+  </dependencies>
+  <build>
+
+    <sourceDirectory>src/java/main</sourceDirectory> 
+    <unitTestSourceDirectory>src/java/test</unitTestSourceDirectory> 
+    <unitTest> 
+      <includes> 
+        <include>**/*Test.java</include> 
+      </includes> 
+    </unitTest> 
+    <resources>
+      <resource>
+        <directory>src/plugin-resources</directory>
+        <targetPath>plugin-resources</targetPath>
+      </resource>
+      <resource>
+        <directory>.</directory>
+        <includes>
+          <include>plugin.jelly</include>
+          <include>plugin.properties</include>
+          <include>project.properties</include>
+          <include>project.xml</include>
+        </includes>
+      </resource>
+    </resources>
+  </build>
+</project>

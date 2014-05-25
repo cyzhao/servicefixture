@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util.xsd
+						   http://www.springframework.org/schema/aop   http://www.springframework.org/schema/aop/spring-aop.xsd
+						   http://www.springframework.org/schema/tx    http://www.springframework.org/schema/tx/spring-tx.xsd">
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
+		<property name="url" value="jdbc:hsqldb:mem:memDB"/>
+		<property name="username" value="sa"/>
+		<property name="password" value=""/>
+	</bean>
+	
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		
+		<property name="mappingResources">
+			<list>
+				<value>hbm/product.hbm.xml</value>
+				<value>hbm/order.hbm.xml</value>
+				<value>hbm/customer.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<util:properties location="classpath:hibernate.properties"/>
+		</property>
+	</bean>
+	
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="productDao"
+		class="net.servicefixture.sample.dao.hibernate.ProductDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="customerDao"
+		class="net.servicefixture.sample.dao.hibernate.CustomerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="orderDao"
+		class="net.servicefixture.sample.dao.hibernate.OrderDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="customerService"
+		class="net.servicefixture.sample.service.CustomerServiceImpl">
+		<property name="customerDao" ref="customerDao"/>
+	</bean>
+	
+	<bean id="orderService"
+		class="net.servicefixture.sample.service.OrderServiceImpl">
+		<property name="orderDao" ref="orderDao"/>
+	</bean>
+	
+	<bean id="productService"
+		class="net.servicefixture.sample.service.ProductServiceImpl">
+		<property name="productDao" ref="productDao"/>
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="serviceMethods"
+			expression="execution(* net.servicefixture.sample.service.*Service.*(..))"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+	</aop:config>
+</beans>

@@ -1,0 +1,2 @@
+call mvn install:install-file -DgroupId=javax.transaction -DartifactId=jta -Dversion=1.0.1B -Dpackaging=jar -Dfile=jta-1_0_1B-classes.zip
+call mvn install:install-file -DgroupId=springframework -DartifactId=spring -Dversion=2.0-rc3 -Dpackaging=jar -Dfile=spring-2.0-rc3.jar

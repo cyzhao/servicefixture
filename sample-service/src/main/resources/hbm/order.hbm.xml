@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="net.servicefixture.sample.domain.Order" table="ORDERS">
+		<id name="orderId" type="long">
+			<column name="ORDER_ID"/>
+			<generator class="identity"/>
+		</id>
+		<property name="orderDate" type="timestamp">
+			<column name="ORDER_DATE" not-null="true"/>
+		</property>
+		<property name="freeShipping" type="yes_no">
+			<column name="IS_FREE_SHIPPING" not-null="true"/>
+		</property>
+		<property name="totalPrice" type="double">
+			<column name="TOTAL_PRICE" not-null="true"/>
+		</property>
+		
+		<component name="billingAddress"
+			class="net.servicefixture.sample.domain.Address">
+			<property name="street" type="string">
+				<column name="BILLING_STREET" not-null="true"/>
+			</property>
+			<property name="city" type="string">
+				<column name="BILLING_CITY" not-null="true"/>
+			</property>
+			<property name="state" type="string">
+				<column name="BILLING_STATE" not-null="true"/>
+			</property>
+			<property name="zip" type="string">
+				<column name="BILLING_ZIP"/>
+			</property>
+			<property name="country" type="string">
+				<column name="BILLING_COUNTRY"/>
+			</property>
+		</component>
+		
+		<component name="shippingAddress"
+			class="net.servicefixture.sample.domain.Address">
+			<property name="street" type="string">
+				<column name="SHIPPING_STREET"/>
+			</property>
+			<property name="city" type="string">
+				<column name="SHIPPING_CITY"/>
+			</property>
+			<property name="state" type="string">
+				<column name="SHIPPING_STATE"/>
+			</property>
+			<property name="zip" type="string">
+				<column name="SHIPPING_ZIP"/>
+			</property>
+			<property name="country" type="string">
+				<column name="SHIPPING_COUNTRY"/>
+			</property>
+		</component>
+		
+		<many-to-one name="customer" lazy="false" column="CUSTOMER_ID" insert="true"
+			update="false"/>
+		<many-to-one name="paymentMethod" lazy="false" column="PAYMENT_METHOD_ID"
+			insert="true" update="true"/>
+		
+		<set name="orderItems" lazy="false" cascade="all,delete-orphan">
+			<key column="ORDER_ID" not-null="true"/>
+			<one-to-many class="net.servicefixture.sample.domain.OrderItem"/>
+		</set>
+		
+	</class>
+	<class name="net.servicefixture.sample.domain.OrderItem" table="ORDER_ITEMS">
+		<id name="orderItemId" type="long">
+			<column name="ORDER_ITEM_ID"/>
+			<generator class="identity"/>
+		</id>
+		<property name="quantity" type="int">
+			<column name="QUANTITY"/>
+		</property>
+		<many-to-one name="product" lazy="false" column="PRODUCT_ID" insert="true"
+			update="true"/>
+	</class>
+</hibernate-mapping>

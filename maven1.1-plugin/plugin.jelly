@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project xmlns:j="jelly:core" xmlns:ant="jelly:ant" xmlns:u="jelly:util" >
+  <goal name="servicefixture:test">
+    <j:if test="${maven.servicefixture.timestamp}">
+      <ant:tstamp/>
+      <ant:property name="datestamp" value="${DSTAMP}"/> 
+      <j:set var="maven.servicefixture.output" value="${maven.servicefixture.output}/${datestamp}"/>
+    </j:if> 
+    <mkdir dir="${maven.servicefixture.output}"/>
+
+    <ant:java classname="net.servicefixture.fitnesse.TestRunner" fork="true">
+      <ant:arg line="-v"/>
+      <ant:arg line="-suite"/>
+      <ant:arg line="${maven.servicefixture.host}"/>
+      <ant:arg line="${maven.servicefixture.port}"/>
+      <ant:arg line="${maven.servicefixture.page}"/>
+      <ant:arg line="${maven.servicefixture.output}/${maven.servicefixture.page}.html"/>
+      <ant:classpath>
+        <ant:pathelement location="${plugin.getDependencyPath('fitnesse:fitnesse')}"/>
+        <ant:pathelement location="${plugin.getDependencyPath('servicefixture:servicefixture')}"/>
+        <ant:pathelement location="${plugin.getDependencyPath('commons-httpclient:commons-httpclient')}"/>
+        <ant:pathelement location="${plugin.getDependencyPath('commons-logging:commons-logging')}"/>
+        <ant:pathelement location="${plugin.getDependencyPath('commons-lang:commons-lang')}"/>
+      </ant:classpath>
+    </ant:java>
+  </goal>
+  
+  <goal name="servicefixture:regression">
+    <u:tokenize var="maven.servicefixture.regression.pages.tokens" delim=",">${maven.servicefixture.regression.pages}</u:tokenize>
+    <j:forEach var="page" items="${maven.servicefixture.regression.pages.tokens}">
+    	<j:set var="maven.servicefixture.page" value="${maven.servicefixture.regression.pages.prefix}${page}"/>
+	<attainGoal name="servicefixture:test"/>			     
+    </j:forEach>
+  </goal>  
+</project>

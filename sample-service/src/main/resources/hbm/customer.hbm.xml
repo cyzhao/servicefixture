@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="net.servicefixture.sample.domain.Customer" table="CUSTOMERS">
+		<id name="customerId" type="long">
+			<column name="CUSTOMER_ID"/>
+			<generator class="identity"/>
+		</id>
+		<property name="firstName" type="string">
+			<column name="FIRST_NAME" length="30" not-null="true"/>
+		</property>
+		<property name="lastName" type="string">
+			<column name="LAST_NAME" length="30" not-null="true"/>
+		</property>
+		<property name="emailAddress" type="string">
+			<column name="EMAIL_ADDRESS" length="100" not-null="true"/>
+		</property>
+		<array name="paymentMethods" cascade="all,delete-orphan">
+			<key column="CUSTOMER_ID" not-null="true"/>
+			<list-index column="SORT_ORDER" base="1"/>
+			<one-to-many class="net.servicefixture.sample.domain.PaymentMethod"/>
+		</array>
+	</class>
+	<class name="net.servicefixture.sample.domain.PaymentMethod"
+		table="PAYMENT_METHODS">
+		<id name="paymentMethodId" type="long">
+			<column name="PAYMENT_METHOD_ID"/>
+			<generator class="identity"/>
+		</id>
+		<property name="cardNumber" type="string">
+			<column name="CARD_NUMBER" length="30" not-null="true"/>
+		</property>
+		<property name="verificationCode" type="string">
+			<column name="VERIFICATION_CODE" length="30"/>
+		</property>
+		<property name="expirationDate" type="calendar">
+			<column name="EXPIRATION_DATE" not-null="true"/>
+		</property>
+		<property name="description" type="string">
+			<column name="DESCRIPTION" length="50"/>
+		</property>
+		<property name="paymentType">
+			<column name="PAYMENT_TYPE" length="30"/>
+			<type name="net.servicefixture.sample.util.EnumUserType">
+				<param name="javaType">
+					net.servicefixture.sample.domain.PaymentType</param>
+			</type>
+		</property>
+	</class>
+</hibernate-mapping>
